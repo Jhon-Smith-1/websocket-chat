@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat WebSocket - Estilo Twitch Mejorado</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>💬 Chat en Tiempo Real</h2>
+
+  <div id="chat-container">
+    <!-- Fila de inputs y botón -->
+    <div class="input-row">
+      <div class="input-group">
+        <label for="usernameInput">Nombre:</label>
+        <input type="text" id="usernameInput" placeholder="Ingresa tu nombre..." />
+      </div>
+      <div class="input-group">
+        <label for="messageInput">Mensaje:</label>
+        <input type="text" id="messageInput" placeholder="Escribe un mensaje..." />
+      </div>
+      <button onclick="sendMessage()">🚀 Enviar</button>
+    </div>
+
+    <!-- Área donde se mostrarán los mensajes -->
+    <div id="messages"></div>
+  </div>
+
+  <script>
+    // Reemplaza con la URL que te da Ngrok o tu servidor WebSocket
+    const socket = new WebSocket('https://89b4-187-188-227-134.ngrok-free.app');
+
+    socket.addEventListener('open', function () {
+      console.log('✅ Conectado al servidor WebSocket');
+    });
+
+    socket.addEventListener('message', function (event) {
+      const data = JSON.parse(event.data);
+
+      // Si el servidor envía un historial de mensajes
+      if (data.type === 'history') {
+        data.messages.forEach(msg => {
+          agregarMensaje(msg);
+        });
+      }
+      // Si el servidor envía un mensaje nuevo
+      else if (data.type === 'message') {
+        agregarMensaje(data.message);
+      }
+    });
+
+    function sendMessage() {
+      const inputMessage = document.getElementById('messageInput');
+      const message = inputMessage.value;
+      const username = document.getElementById('usernameInput').value || '👤 Usuario desconocido';
+
+      if (message) {
+        // Enviamos un objeto con username y message
+        socket.send(JSON.stringify({ username: username, message: message }));
+        inputMessage.value = '';
+      }
+    }
+
+    /**
+     * Función para agregar un mensaje al contenedor
+     * @param {Object|String} mensaje - Dependiendo de cómo lo envíe el servidor,
+     *                                  puede ser un objeto con { username, message }
+     *                                  o un simple string con todo el texto.
+     */
+    function agregarMensaje(mensaje) {
+      const messagesDiv = document.getElementById('messages');
+
+      // Si el servidor envía un objeto { username, message }
+      if (typeof mensaje === 'object' && mensaje.username && mensaje.message) {
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('chat-message');
+        messageEl.innerHTML = `
+          <span class="username">De ${mensaje.username}:</span>
+          <span class="text">${mensaje.message}</span>
+        `;
+        messagesDiv.appendChild(messageEl);
+      }
+      // Si el servidor envía directamente un string (ej. "De Antonio: Hola")
+      else if (typeof mensaje === 'string') {
+        const messageEl = document.createElement('div');
+        messageEl.classList.add('chat-message');
+        messageEl.textContent = mensaje; // Lo mostramos tal cual
+        messagesDiv.appendChild(messageEl);
+      }
+
+      // Scrollea hacia abajo al agregar mensaje
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+  </script>
+</body>
+</html>
