@@ -1,0 +1,169 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #0e0e10;
+  color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+}
+
+h2 {
+  color: #9147ff;
+  font-weight: 600;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Contenedor principal del chat */
+#chat-container {
+  background-color: #18181b;
+  border-radius: 15px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+  width: 90%;
+  max-width: 800px;
+  padding: 20px;
+}
+
+/* Fila que agrupa los inputs y el botón */
+.input-row {
+  display: flex;
+  align-items: flex-end; /* Alinea la parte inferior de los elementos */
+  flex-wrap: wrap;       /* Permite que salte a la siguiente línea si no cabe */
+  margin-bottom: 20px;
+  gap: 10px; /* Espacio entre elementos */
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+}
+
+.input-group label {
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #f0f0f0;
+}
+
+/* Área de mensajes */
+#messages {
+  margin-top: 20px;
+  border-radius: 10px;
+  border: 1px solid #2a2a2d;
+  padding: 20px;
+  height: 300px;
+  overflow-y: auto;
+  background-color: #1f1f23;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: #9147ff #1f1f23;
+}
+
+/* Cada mensaje individual con estilo de "burbuja" */
+.chat-message {
+  background-color: #2a2a2d;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* Nombre de usuario en color distintivo */
+.chat-message .username {
+  color: #9147ff;
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+/* Texto del mensaje */
+.chat-message .text {
+  color: #f0f0f0;
+}
+
+/* Scrollbar para navegadores basados en WebKit */
+#messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background-color: #9147ff;
+  border-radius: 10px;
+}
+
+/* Inputs y botón */
+input,
+button {
+  padding: 12px;
+  margin: 0; /* Usamos gap en lugar de margin para separar */
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+input[type="text"] {
+  background-color: #2a2a2d;
+  color: #f0f0f0;
+  width: 250px; /* Ajusta el ancho si lo deseas */
+}
+
+/* Botón con efecto "neón" */
+button {
+  background: linear-gradient(135deg, #9147ff, #772ce8);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 12px 25px;
+  font-weight: 600;
+  border-radius: 50px;
+  box-shadow: 0 0 20px rgba(145, 71, 255, 0.6);
+  position: relative;
+  overflow: hidden;
+  margin-left: auto; /* Empuja el botón hacia la derecha */
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 10%, transparent 10.01%);
+  background-size: 5px 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+button:hover::before {
+  opacity: 0.1;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #772ce8, #9147ff);
+  box-shadow: 0 0 30px rgba(145, 71, 255, 0.8);
+  transform: scale(1.05);
+}
+
+/* Responsivo para pantallas pequeñas */
+@media (max-width: 600px) {
+  .input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .input-group {
+    width: 100%;
+  }
+  input[type="text"] {
+    width: 100%;
+  }
+  button {
+    width: 100%;
+    margin-left: 0;
+  }
+}
